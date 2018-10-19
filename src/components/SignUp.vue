@@ -1,47 +1,38 @@
  <template>
-      <div>
+      <b-container>
 
         {{ $route.params.repo }}
 
-      </div>
+        <div>
+          <ol>
+            <li v-for="repo in repos">{{repo.data}}</li>
+          </ol>
+        </div>
+      </b-container>
 
     </template>
 
  <script>
+   import authMixins from '../mixins/octokits'
    export default {
      name: 'signUp',
-     data () {
-       return {
-         form: {
-           email: '',
-           name: '',
-           food: null,
-           checked: []
-         },
-         foods: [
-           { text: 'Select One', value: null },
-           'Carrots', 'Beans', 'Tomatoes', 'Corn'
-         ],
-         show: true
+
+     mixins: [authMixins],
+
+     data(){
+       return{
+         repos: []
        }
      },
-     methods: {
-       onSubmit (evt) {
-         evt.preventDefault();
-         alert(JSON.stringify(this.form));
-       },
-       onReset (evt) {
-         evt.preventDefault();
-         /* Reset our form values */
-         this.form.email = '';
-         this.form.name = '';
-         this.form.food = null;
-         this.form.checked = [];
-         /* Trick to reset/clear native browser form validation state */
-         this.show = false;
-         this.$nextTick(() => { this.show = true });
-       }
+     created(){
+
+       this.octokit.repos.get({owner: 'julius75', repo: this.$route.params.repo}).then (
+         data => {
+           this.repos=data.data;
+         }
+       )
      }
+
    }
  </script>
 

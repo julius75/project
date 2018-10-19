@@ -11,8 +11,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'hello',
-      component: Hello
+      name: 'Repolist',
+      component: Repolist
     },
     {
       path: '/login',
